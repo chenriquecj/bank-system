@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <limits>
 
 class BankAccount {
     private:
@@ -10,6 +12,7 @@ class BankAccount {
         void deposit (double value) {
             if (value > 0) {
                 balance += value;
+                std::cout << "Deposit made succesfully!" << std::endl;
             } else {
                 std::cout << "Error: cannot add 0 or negative numbers to account." << std::endl; 
             }
@@ -17,6 +20,7 @@ class BankAccount {
         void withdraw (double value) {
             if (value <= balance) {
                 balance -= value;
+                std::cout << "Withdraw made succesfully!" << std::endl;
             } else {
                 std::cout << "Error: Insuficient funds." << std::endl;
             }
@@ -25,6 +29,25 @@ class BankAccount {
             std::cout << "Account: " << name << "\nBalance: $" << balance << std::endl;
         }
 };
+
+class Menu {
+    public:
+        void clearScreen() {
+        #ifdef _WIN32
+            system("cls"); // For Windows
+        #else
+            system("clear"); // For Linux and macOS
+        #endif
+    }
+
+    void waitInput() {
+        std::cin.ignore();
+        std::cout << "\nPress Enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+
+};
+
 
 int main () {
     std::string name;
@@ -36,12 +59,14 @@ int main () {
     std::cin >> initialDeposit;
 
     BankAccount account = BankAccount(name, initialDeposit);
+    Menu menu = Menu();
 
     int choice;
     double amount;
 
     do
     {
+        menu.clearScreen();
         std::cout << "\n1. Deposit" << std::endl;
         std::cout << "2. Withdraw" << std::endl;
         std::cout << "3. Display Account Info" << std::endl;
@@ -69,5 +94,6 @@ int main () {
         default:
             std::cout << "Invalid choice." << std::endl;
         }
+        menu.waitInput();
     } while (choice != 4);
 }
